@@ -110,3 +110,30 @@ pool-1-thread-1售出当前票号	1
 > executorService.shutdown();
 
 所以用完线程池后一定要记着关闭，不然线程并不会关闭，还会占用计算机资源。
+
+虽然以上程序解决了售票问题，但是现实中有这样的情况，每个窗口员工操作同一个工作的速度不一样，有可能1号窗口都卖出了2张票而2号窗口1张都还没卖完。利用volatile可以实现无锁售票模式，模拟实现这样的情况。
+```java
+class testVolatile implements Runnable{
+    volatile static int ticket =10;
+    @Override
+    public void run() {
+        while (ticket>0)
+        {
+            System.out.println(Thread.currentThread().getName()+"\t"+ticket--);
+        }
+    }
+}
+```
+```
+pool-1-thread-1	10
+pool-1-thread-1	7
+pool-1-thread-1	6
+pool-1-thread-1	5
+pool-1-thread-1	4
+pool-1-thread-1	3
+pool-1-thread-1	2
+pool-1-thread-1	1
+pool-1-thread-4	8
+pool-1-thread-3	9
+```
+volatile关键字是一种原子性操作，确保了应用的可视性，如果对一个域声明为volatile，那么只要对这个域产生了写操作，那么所有的读操作就都可以看到这个修改。即便使用了本地缓存，情况也确实如此，volatile域会立即被写入到主存中，而读取操作就发生在主存中。
