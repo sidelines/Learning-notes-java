@@ -41,7 +41,7 @@ pool-1-thread-4售出当前票号	1
 pool-1-thread-1售出当前票号	1
 pool-1-thread-3售出当前票号	2
 ```
-
+现在使用同步锁对run中的方法加锁，同时加锁后需要在锁内再判断次以防止出错
 ```java
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
